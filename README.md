@@ -6,19 +6,20 @@
       - response type : application/json
       - response body:
 <pre>
-		{
+{
       "replaced": 0, // 1 if an existing key's val was replaced
       "msg": "success"
-		}
+}
 </pre>
 
-    - case 'e1' exists
-		  - status code : 200
-		  - response type : application/json
-		  - response body:
+- case 'e1' exists
+	- status code : 200
+	- response type : application/json
+	- response body:
+
 <pre>
-		{
+{
       "replaced": 1, // 0 if key did not exist
       "msg": "success"
-		}
+}
 </pre>
