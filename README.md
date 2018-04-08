@@ -12,10 +12,11 @@
 }
 </pre>
 
-- case 'e1' exists
-	- status code : 200
-	- response type : application/json
-	- response body:
+1. PUT localhost:3000/graph -d "vertices=[v1,v2]&edge=e1"
+    - case 'e1' exists
+	    - status code : 200
+	    - response type : application/json
+	    - response body:
 
 <pre>
 {
