@@ -12,7 +12,7 @@
       "msg": "success",
       "part": 2,
       "vector": "6.2.9.1",
-      "timestamp": "1248425146"
+      "time": "1248425146"
 }
 </pre>
 
@@ -27,7 +27,7 @@
       "msg": "already existed",
       "part": 2,
       "vector": "6.2.9.1",
-      "timestamp": "1248425146"
+      "time": "1248425146"
 }
 </pre>
 
@@ -43,7 +43,7 @@
       "error": "key does not exist",
       "part": 2,
       "vector": "6.2.9.1",
-      "timestamp": "1248425146"
+      "time": "1248425146"
 }
 </pre>
 
@@ -56,11 +56,11 @@
 <pre>
 {
       "msg": "success",
-      "vertices": [v1,v2],
-      "edges": [e1],
+      "vertices": [v1,v2,v3],
+      "edges": [[v1,v2],[v1,v3]],
       "part": 2,
       "vector": "6.2.9.1",
-      "timestamp": "1248425146"
+      "time": "1248425146"
 }
 </pre>
 
@@ -76,7 +76,7 @@
       "error": "key does not exist",
       "part": 2,
       "vector": "6.2.9.1",
-      "timestamp": "1248425146"
+      "time": "1248425146"
 }
 </pre>
 
@@ -91,14 +91,14 @@
       "msg": "success",
       "part": 2,
       "vector": "6.2.9.1",
-      "timestamp": "1248425146"
+      "time": "1248425146"
 }
 </pre>
 
 ## Server Based Functionality
 
 1. PUT, GET, DELETE 
-    - case: main instance is down 
+    - case: a queried instance is down 
       - status code : 404
       - response type : application/json
       - response body:
