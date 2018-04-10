@@ -1,4 +1,4 @@
-# Scalable &amp; Highly Consistent(CAP Theorem) Graph Store API
+# Scalable, Fault Tolerant, &amp; Highly Consistent(CAP Theorem) Graph Store API
 
 ## Graph Based Functionality
 
