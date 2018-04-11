@@ -2,7 +2,7 @@
 
 ## Introduction
 
-    The goal of this project is to provide a REST-accessible graph storage service that 
+  The goal of this project is to provide a REST-accessible graph storage service that 
 runs on port 3000 and is available as a resource named gs. For example, the service 
 would listen at http://server-hostname:3000/gs. We want to develop distributed system 
 software to support this service so that it can store an amount of data that would 
@@ -19,7 +19,7 @@ partition can store the same subset of graphs assigned to that partition, provid
 a measurable amount of fault-tolerance to the user if one of those hosts happens to 
 crash or experience a network partition. 
 
-    Scalability is achieved by allowing for the
+  Scalability is achieved by allowing for the
 user to change the system environment by adding or removing server hosts, based on 
 their needs, using API calls which then have our distributed system software 
 automatically reshuffle our partitioning and graph distribution across all active 
