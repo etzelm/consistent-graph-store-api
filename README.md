@@ -5,7 +5,7 @@
 The goal of this project is to provide a REST-accessible graph storage service that 
 runs on port 3000 and is available as a resource named gs. For example, the service 
 would listen at http://server-hostname:3000/gs. We want to develop distributed system 
-software to support this service so that it can store the amount of data that would 
+software to support this service so that it can store an amount of data that would 
 not normally fit onto a single-machine system. To accomplish this, we will simulate 
 our server code as if it is being run on multiple, separate hosts simultaneously, 
 using Docker to provide this functionality. A single server host in our system stores 
@@ -32,6 +32,7 @@ our system be highly available, meaning our service should only return responses
 requests if it can guarantee that it is using the most recent data available to it.
 
 ## Input Format Specifications
+
 - graph names
   - charset: [a-zA-Z0-9_] i.e. Alphanumeric including underscore, and case-sensitive 
   - size:    1 to 250 characters
@@ -47,8 +48,8 @@ requests if it can guarantee that it is using the most recent data available to 
 ## Environment Variables Used
 
 - _"PARTITIONS"_ is used to keep track of all other active server hosts in our system
-- _"IP"_ is used to store the docker network ip and port used to inter-communicate
-- _"PORT"_ is used to store the local network port exposed by server node for the user
+- _"IP"_ is used to store the docker network ip/port used for system inter-communication
+- _"PORT"_ is used to store the local network port exposed by docker for the user
 - _"R"_ is used to store the maximum number of server hosts a partition can be assigned
 
 ## Example Docker Commands
