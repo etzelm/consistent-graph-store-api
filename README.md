@@ -1,6 +1,6 @@
-## Scalable, Fault Tolerant, &amp; Strongly Consistent Graph Store API
+# Scalable, Fault Tolerant, &amp; Consistent Graph Store API
 
-#### Introduction
+## Introduction
 
 The goal of this project is to provide a REST-accessible graph storage service that 
 runs on port 3000 and is available as a resource named gs. For example, the service 
@@ -31,7 +31,7 @@ strongly consistent. In this project, we will favour strong consistency over hav
 our system be highly available, meaning our service should only return responses to 
 requests if it can guarantee that it is using the most recent data available to it.
 
-#### Input Format Specifications
+## Input Format Specifications
 - graph names
   - charset: [a-zA-Z0-9_] i.e. Alphanumeric including underscore, and case-sensitive 
   - size:    1 to 250 characters
@@ -44,14 +44,14 @@ requests if it can guarantee that it is using the most recent data available to 
   - charset: [a-zA-Z0-9_] i.e. Alphanumeric including underscore, and case-sensitive 
   - size:    1 to 250 characters
 
-#### Environment Variables Used
+## Environment Variables Used
 
 - _"PARTITIONS"_ is used to keep track of all other active server hosts in our system
 - _"IP"_ is used to store the docker network ip and port used to inter-communicate
 - _"PORT"_ is used to store the local network port exposed by server node for the user
 - _"R"_ is used to store the maximum number of server hosts a partition can be assigned
 
-#### Example Docker Commands
+## Example Docker Commands
 
 Starting a system with 4 active server hosts and a maximum partition size of 2:
 
@@ -60,15 +60,15 @@ Starting a system with 4 active server hosts and a maximum partition size of 2:
 - docker run -p 3003:3000 --ip=10.0.0.23:3000 --net=mynet -e IP="10.0.0.23:3000" -e PORT="3003" -e R=2 -e PARTITIONS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
 - docker run -p 3004:3000 --ip=10.0.0.24:3000 --net=mynet -e IP="10.0.0.24:3000" -e PORT="3004" -e R=2 -e PARTITIONS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
 
-#### Partitioning Algorithms Implemented
+## Partitioning Algorithms Implemented
 
 temp
 
-#### Consistentency Algorithms Implemented
+## Consistentency Algorithms Implemented
 
 temp
 
-#### Technologies Used
+## Technologies Used
 
 gRPC/protocol buffers, gin server code
 (badges(pictures) to come later)
