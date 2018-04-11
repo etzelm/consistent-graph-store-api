@@ -1,4 +1,4 @@
-# Scalable, Fault Tolerant, &amp; Consistent Graph Store API
+# Scalable, Fault Tolerant, &amp; Strongly Consistent Graph Store API
 
 ## Introduction
 
@@ -24,8 +24,12 @@ automatically reshuffle our partitioning and graph distribution across all activ
 server hosts to attain maximum fault-tolerance and minimize access latency. To ensure 
 strong consistency among server hosts in a partition that stores the same subset of 
 graphs in our system, we will use an algorithm called Raft that uses a 2 phase commit 
-sequence and timers to achieve consensus on a total order over any value given to us 
-by the user.
+sequence and timers to achieve consensus on a total causal order over any value given 
+to us by the user. Due to the CAP theorem, we know that using partitions to attain 
+fault tolerance means we cannot have a graph store that is both highly available and 
+strongly consistent. In this project, we will favour strong consistency over having 
+our system be highly available, meaning our service should only return responses to 
+requests if it can guarantee that it is using the most recent data available to it.
 
 ## Input Format Specifications
 - graph names
@@ -45,6 +49,15 @@ by the user.
 - _"PARTITIONS"_ is used to keep track of all other active server hosts in our system
 - _"IP"_ is used to store the docker network ip and port used to inter-communicate
 - _"PORT"_ is used to store the local network port exposed by server node for the user
+- _"R"_ is used to store the maximum number of server hosts a partition can be assigned
+
+## Example Docker Commands
+
+- Starting 4 active server hosts with a maximum partition size of 2
+  - docker run -p 3001:3000 --ip=10.0.0.21:3000 --net=mynet -e IP="10.0.0.21:3000" -e PORT="3001" -e R=2 -e PARTITIONS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
+  - docker run -p 3002:3000 --ip=10.0.0.22:3000 --net=mynet -e IP="10.0.0.22:3000" -e PORT="3002" -e R=2 -e PARTITIONS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
+  - docker run -p 3003:3000 --ip=10.0.0.23:3000 --net=mynet -e IP="10.0.0.23:3000" -e PORT="3003" -e R=2 -e PARTITIONS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
+  - docker run -p 3004:3000 --ip=10.0.0.24:3000 --net=mynet -e IP="10.0.0.24:3000" -e PORT="3004" -e R=2 -e PARTITIONS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
 
 ## Partitioning Algorithms Implemented
 
