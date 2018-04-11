@@ -18,14 +18,14 @@ to that partition, providing a measurable amount of fault-tolerance to the user 
 one of those hosts happens to crash.
 
 ## Input Format Specifications
-- graphs
+- graph names
   - charset: [a-zA-Z0-9_] i.e. Alphanumeric including underscore, and case-sensitive 
   - size:    1 to 250 characters
 
-- vertices
+- vertex names
   - charset: [a-zA-Z0-9_] i.e. Alphanumeric including underscore, and case-sensitive 
   - size:    1 to 250 characters
 
-- edges
+- edge names
   - charset: [a-zA-Z0-9_] i.e. Alphanumeric including underscore, and case-sensitive 
   - size:    1 to 250 characters

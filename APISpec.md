@@ -2,7 +2,94 @@
 
 ## Graph Based Functionality
 
-1. PUT localhost:3000/gs -d "graph=g1&vertices=[v1,v2]&edge=e1&vector_clock=6.2.9.1"
+1. PUT localhost:3000/gs -d "graph=g1&vector_clock=6.2.9.1"
+    - case: 'g1' does not exist
+      - status code : 201
+      - response type : application/json
+      - response body:
+<pre>
+{
+      "msg": "success, empty graph initialized",
+      "part": 2,
+      "vector": "6.2.9.1",
+      "time": "1248425146"
+}
+</pre>
+
+1. PUT localhost:3000/gs -d "graph=g1&vector_clock=6.2.9.1"
+    - case: 'g1' exists
+      - status code : 200
+      - response type : application/json
+      - response body:
+
+<pre>
+{
+      "msg": "already existed, no changes made",
+      "part": 2,
+      "vector": "6.2.9.1",
+      "time": "1248425146"
+}
+</pre>
+
+2. PUT localhost:3000/gs -d "graph=g1&vertices=[v1,v2,v3]&edges=[[e1,v1,v2],[e2,v1,v3]]&vector_clock=6.2.9.1"
+    - case: 'g1' does not exist
+      - status code : 201
+      - response type : application/json
+      - response body:
+<pre>
+{
+      "msg": "success, graph initialized with given data",
+      "part": 2,
+      "vector": "6.2.9.1",
+      "time": "1248425146"
+}
+</pre>
+
+2. PUT localhost:3000/gs -d "graph=g1&vertices=[v1,v2,v3]&edges=[[e1,v1,v2],[e2,v1,v3]]&vector_clock=6.2.9.1"
+    - case: 'g1' exists
+      - status code : 200
+      - response type : application/json
+      - response body:
+
+<pre>
+{
+      "msg": "already existed, no changes made",
+      "part": 2,
+      "vector": "6.2.9.1",
+      "time": "1248425146"
+}
+</pre>
+
+3. PUT localhost:3000/gs -d "graph=g1&vertex=v1&vector_clock=6.2.9.1"
+    - case: 'v1' does not exist
+      - status code : 201
+      - response type : application/json
+      - response body:
+<pre>
+{
+      "msg": "success",
+      "part": 2,
+      "vector": "6.2.9.1",
+      "time": "1248425146"
+}
+</pre>
+
+3. PUT localhost:3000/gs -d "graph=g1&vertex=v1&vector_clock=6.2.9.1"
+    - case: 'v1' exists
+      - status code : 200
+      - response type : application/json
+      - response body:
+
+<pre>
+{
+      "msg": "already existed",
+      "part": 2,
+      "vector": "6.2.9.1",
+      "time": "1248425146"
+}
+</pre>
+
+4. PUT localhost:3000/gs -d "graph=g1&vertices=[v1,v2]&edge=e1&vector_clock=6.2.9.1"
     - case: 'e1' does not exist
       - status code : 201
       - response type : application/json
@@ -16,7 +103,7 @@
 }
 </pre>
 
-1. PUT localhost:3000/gs -d "graph=g1&vertices=[v1,v2]&edge=e1&vector_clock=6.2.9.1"
+4. PUT localhost:3000/gs -d "graph=g1&vertices=[v1,v2]&edge=e1&vector_clock=6.2.9.1"
     - case: 'e1' exists
       - status code : 200
       - response type : application/json
@@ -31,7 +118,7 @@
 }
 </pre>
 
-2. GET localhost:3000/gs?graph=g1&vector_clock=6.2.9.1
+5. GET localhost:3000/gs?graph=g1&vector_clock=6.2.9.1
     - case: 'g1' does not exist
       - status code : 404
       - response type : application/json
@@ -40,14 +127,14 @@
 <pre>
 {
       "msg": "error",
-      "error": "key does not exist",
+      "error": "graph does not exist",
       "part": 2,
       "vector": "6.2.9.1",
       "time": "1248425146"
 }
 </pre>
 
-2. GET localhost:3000/gs?graph=g1&vector_clock=6.2.9.1
+5. GET localhost:3000/gs?graph=g1&vector_clock=6.2.9.1
     - case: 'g1' exists
       - status code : 200
       - response type : application/json
@@ -57,14 +144,46 @@
 {
       "msg": "success",
       "vertices": [v1,v2,v3],
-      "edges": [[v1,v2],[v1,v3]],
+      "edges": [[e1,v1,v2],[e2,v1,v3]],
       "part": 2,
       "vector": "6.2.9.1",
       "time": "1248425146"
 }
 </pre>
 
-3. DELETE localhost:3000/gs?graph=g1&vector_clock=6.2.9.1
+6. GET localhost:3000/gs?graph=g1&edge=e1&vector_clock=6.2.9.1
+    - case: 'e1' does not exist
+      - status code : 404
+      - response type : application/json
+      - response body:
+
+<pre>
+{
+      "msg": "error",
+      "error": "edge does not exist",
+      "part": 2,
+      "vector": "6.2.9.1",
+      "time": "1248425146"
+}
+</pre>
+
+6. GET localhost:3000/gs?graph=g1&edge=e1&vector_clock=6.2.9.1
+    - case: 'e1' exists
+      - status code : 200
+      - response type : application/json
+      - response body:
+
+<pre>
+{
+      "msg": "success",
+      "vertices": [v1,v2],
+      "part": 2,
+      "vector": "6.2.9.1",
+      "time": "1248425146"
+}
+</pre>
+
+7. DELETE localhost:3000/gs?graph=g1&vector_clock=6.2.9.1
     - case: 'g1' does not exist
       - status code : 404
       - response type : application/json
@@ -80,7 +199,7 @@
 }
 </pre>
 
-3. DELETE localhost:3000/gs?graph=g1&vector_clock=6.2.9.1
+7. DELETE localhost:3000/gs?graph=g1&vector_clock=6.2.9.1
     - case: 'g1' exists
       - status code : 200
       - response type : application/json
