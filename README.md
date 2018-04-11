@@ -29,3 +29,17 @@ one of those hosts happens to crash.
 - edge names
   - charset: [a-zA-Z0-9_] i.e. Alphanumeric including underscore, and case-sensitive 
   - size:    1 to 250 characters
+
+## Partitioning Algorithms Implemented
+
+temp
+
+## Consistentency Algorithms Implemented
+
+We plan to implement the RAFT algorithm to ensure consistency among the data stored 
+in our distributed system.
+
+## Technologies Used
+
+gRPC/protocol buffers, gin server code
+badges(pictures) to come later

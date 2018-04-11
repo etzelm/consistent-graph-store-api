@@ -229,7 +229,7 @@
 }
 </pre>
 
-2. PUT localhost:8081/gs/view_update -d "ip_port=10.0.0.22:8080&type=add"
+2. PUT localhost:8081/gs/change_view -d "ip_port=10.0.0.22:8080&type=add"
     - case: adding a server node:
       - status code : 200
       - response type : application/json
@@ -243,7 +243,7 @@
 }
 </pre>
 
-2. PUT localhost:8081/gs/view_update -d "ip_port=10.0.0.20:8080&type=remove"
+2. PUT localhost:8081/gs/change_view -d "ip_port=10.0.0.20:8080&type=remove"
     - case: removing a server node:
       - status code : 200
       - response type : application/json
