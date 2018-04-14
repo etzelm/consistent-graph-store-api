@@ -15,6 +15,11 @@ import (
 var IpPort string
 
 func main() {
+
+	// testing:
+	test := new(g)
+	testInterface(test)
+
 	log.Info("Server is starting...")
 
 	IpPort := os.Getenv("ip_port")
