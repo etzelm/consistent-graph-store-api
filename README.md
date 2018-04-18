@@ -2,36 +2,47 @@
 
 ## Introduction
 
-  The goal of this project is to provide a REST-accessible graph storage service that 
-runs on port 3000 and is available as a resource named gs. For example, the service 
-would listen at http://server-hostname:3000/gs. We want to develop distributed system 
-software to support this service so that it can store an amount of data that would 
-not normally fit onto a single machine system. To accomplish this, we will simulate 
-our server code as if it is being run on multiple, separate hosts simultaneously, 
-using Docker to provide this functionality. A single server host in our system stores 
-only a certain subset of the graphs stored in the system as a whole. We also have 
-them keep track of a list of all the other server hostnames in the known system so 
-that they can forward requests they receive for graphs that arent stored locally for 
-them. The plan is to distribute graphs among partitions that each have an active 
-amount of server hosts assigned to them based on the total number of server hosts 
-that exist in the system at the time of observation. This way each server host in a 
-partition can store the same subset of graphs assigned to that partition, providing 
-a measurable amount of fault-tolerance to the user if one of those hosts happens to 
-crash or experience a network partition. 
+  Our inspiration for this project was a desire to recreate some of our coursework, 
+created by [Peter Alvaro](https://github.com/palvaro "Peter Alvaro") of 
+[Disorderly Labs](https://disorderlylabs.github.io/ "Disorderly Labs"), for public view 
+and to do so by completely starting from scratch in order to implement algorithms that 
+we had wanted to use during the course but had ran out of time to do so. Several attempts 
+at academic honesty have been made and we also strongly discourage any current students 
+who happen upon this content from using it in their own coursework, not only because you 
+will be caught but because you are depriving yourself of the education you pay for. Bryan 
+and I are aspiring Software Engineers and we take this project on in the hope of developing 
+and improving the skills needed to be successful in industry, especially when it comes to 
+dealing with distributed systems. The goal of this project is to provide a REST-accessible 
+graph storage service that runs on port 3000 and is available as a resource named gs. For 
+example, the service would listen at http://server-hostname:3000/gs. 
 
-  Scalability is achieved by allowing for the
-user to change the system environment by adding or removing server hosts, based on 
-their needs, using API calls which then have our distributed system software 
-automatically reshuffle our partitioning and graph distribution across all active 
-server hosts to attain maximum fault-tolerance and minimize access latency. To ensure 
-strong consistency among server hosts in a partition that stores the same subset of 
-graphs in our system, we will use an algorithm called Raft that uses a 2 phase commit 
-sequence and timers to achieve consensus on a total causal order over any value given 
-to us by the user. Due to the CAP theorem, we know that using partitions to attain 
-fault tolerance means we cannot have a graph store that is both highly available and 
-strongly consistent. In this project, we will favour strong consistency over having 
-our system be highly available, meaning our service should only return responses to 
-requests if it can guarantee that it is using the most recent data available to it.
+  We want to develop distributed system software to support this service so that it can 
+store an amount of data that would not normally fit onto a single machine system. To 
+accomplish this, we will simulate our server code as if it is being run on multiple, 
+separate hosts simultaneously, using Docker to provide this functionality. A single 
+server host in our system stores only a certain subset of the graphs stored in the 
+system as a whole. We also have them keep track of a list of all the other server 
+hostnames in the known system so that they can forward requests they receive for graphs 
+that arent stored locally for them. The plan is to distribute graphs among partitions 
+that each have an active amount of server hosts assigned to them based on the total 
+number of server hosts that exist in the system at the time of observation. This way 
+each server host in a partition can store the same subset of graphs assigned to that 
+partition, providing a measurable amount of fault-tolerance to the user if one of those 
+hosts happens to crash or experience a network partition. 
+
+  Scalability is achieved by allowing for the user to change the system environment by 
+adding or removing server hosts, based on their needs, using API calls which then have 
+our distributed system software automatically reshuffle our partitioning and graph 
+distribution across all active server hosts to attain maximum fault-tolerance and 
+minimize access latency. To ensure strong consistency among server hosts in a partition 
+that stores the same subset of graphs in our system, we will use an algorithm called 
+Raft that uses a 2 phase commit sequence and timers to achieve consensus on a total 
+causal order over any value given to us by the user. Due to the CAP theorem, we know 
+that using partitions to attain fault tolerance means we cannot have a graph store that 
+is both highly available and strongly consistent. In this project, we will favour strong 
+consistency over having our system be highly available, meaning our service should only 
+return responses to requests if it can guarantee that it is using the most recent data 
+available to it.
 
 ## Input Format Specifications
 
