@@ -11,6 +11,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// StatusMsg is a type alias to allow for 'enum' style type
+type StatusMsg int
+
+// The constants to represent a Status message
+const (
+	SUCCESS StatusMsg = iota
+	ERROR
+)
+
 // IpPort is this computers IP address
 var IpPort string
 
@@ -41,6 +50,32 @@ var num_nodes int
 // server_causal holds the latest causal_payload we have currently seen on this server
 var server_causal map[string]int64
 
+// Represents the string representation of the 'status' field in some
+// responses
+var statuses = [...]string{
+	"success",
+	"error",
+}
+
+type ServerNode struct {
+	IP   string
+	Port string
+}
+
+func (n *ServerNode) String() string {
+	return fmt.Sprintf("%s:%s", n.IP, n.Port)
+}
+
+// GenerateNode is used to take an ip/port and return a Node instance
+func GenerateServerNode(ip, port string) *ServerNode {
+	return &ServerNode{IP: ip, Port: port}
+}
+
+type GetPResponse struct {
+	Msg     string `json:"msg"`
+	Part_id int    `json:"partition_id"`
+}
+
 func main() {
 
 	// testing:
@@ -55,10 +90,12 @@ func main() {
 	}
 	log.Info("IP_PORT: ", IpPort)
 
+	partition_id = 7
+
 	server := gin.Default()
 	log.WithField("server", server).Info("Default Gin server create.")
 	LoadRoutes(server)
-	generateTicker()
+	//generateTicker()
 	server.Run(IpPort)
 }
 
@@ -74,6 +111,12 @@ func LoadRoutes(server *gin.Engine) *gin.Engine {
 		check.GET("", CheckGet)
 		check.POST("", CheckPost)
 		check.PUT("", CheckPut)
+	}
+
+	// All '/gs' routes are grouped for convenience/clarity.
+	gs := server.Group("/gs")
+	{
+		gs.GET("/partition", GetPartition)
 	}
 
 	return server

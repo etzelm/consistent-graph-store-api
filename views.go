@@ -96,3 +96,9 @@ func UpdateCausal(c1 map[string]int64, c2 map[string]int64) map[string]int64 {
 	}
 	return c1
 }
+
+func GetPartition(c *gin.Context) {
+	//server_causal[SELF.String()] = server_causal[SELF.String()] + 2
+	c.JSON(200, GetPResponse{statuses[SUCCESS], partition_id})
+	return
+}
