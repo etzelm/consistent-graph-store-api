@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"reflect"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -24,13 +25,13 @@ const (
 var IpPort string
 
 // VIEW is a list of current nodes in the view.
-var VIEW [][]Node
+var VIEW [][]ServerNode
 
 // View is used as a type alias for a slice of Nodes
-type View [][]Node
+type View [][]ServerNode
 
 // Self represents this current node
-var SELF Node
+var SELF ServerNode
 
 // K holds the size that our partitions are supposed to be
 var R int
@@ -57,6 +58,11 @@ var statuses = [...]string{
 	"error",
 }
 
+type GetPResponse struct {
+	Msg     string `json:"msg"`
+	Part_id int    `json:"partition_id"`
+}
+
 type ServerNode struct {
 	IP   string
 	Port string
@@ -71,9 +77,95 @@ func GenerateServerNode(ip, port string) *ServerNode {
 	return &ServerNode{IP: ip, Port: port}
 }
 
-type GetPResponse struct {
-	Msg     string `json:"msg"`
-	Part_id int    `json:"partition_id"`
+// AddServerNode is used to add a node to the given view
+func AddServerNode(node ServerNode, view View) (View, bool, int) {
+	found := false
+	part_id := 0
+	for ind, part := range view {
+		for _, no := range part {
+			if reflect.DeepEqual(no, node) {
+				found = true
+				part_id = ind
+			}
+		}
+	}
+	if !found {
+		if len(view[partition_it]) < R {
+			view[partition_it] = append(view[partition_it], node)
+			part_id = partition_it
+			partition_it = partition_it + 1
+			if partition_it == num_partitions {
+				partition_it = 0
+			}
+			num_nodes = num_nodes + 1
+			return view, false, part_id
+		}
+		for ind := range view {
+			if len(view[ind]) < R {
+				view[ind] = append(view[ind], node)
+				part_id = ind
+				partition_it = ind + 1
+				if partition_it == num_partitions {
+					partition_it = 0
+				}
+				num_nodes = num_nodes + 1
+				return view, false, part_id
+			}
+		}
+		log.Info("All partitions full, adding new one...")
+		view = append(view, []ServerNode{node})
+		partition_it = num_partitions
+		part_id = partition_it
+		num_partitions = num_partitions + 1
+		num_nodes = num_nodes + 1
+		return view, true, part_id
+	}
+	return view, false, part_id
+}
+
+// RemoveServerNode removes a node from the given view
+func RemoveServerNode(node ServerNode, view View) (View, bool) {
+	log.Info("Before Removing ServerNode: ", view)
+	newView := make([][]ServerNode, 0)
+	for _, part := range view {
+		newNodes := make([]ServerNode, 0)
+		for _, no := range part {
+			if no != node {
+				newNodes = append(newNodes, no)
+			} else {
+				num_nodes = num_nodes - 1
+			}
+		}
+		newView = append(newView, newNodes)
+	}
+	deleted := false
+	newView2 := make([][]ServerNode, 0)
+	for _, part := range newView {
+		if len(part) > 0 {
+			newView2 = append(newView2, part)
+		} else {
+			deleted = true
+			num_partitions = num_partitions - 1
+		}
+	}
+	holdNodes := make([]ServerNode, 0)
+	for _, part := range newView2 {
+		for _, no := range part {
+			holdNodes = append(holdNodes, no)
+		}
+	}
+	temp := num_nodes / R
+	if temp != num_partitions {
+		num_partitions = temp
+	}
+	realView := make([][]ServerNode, temp)
+	partition_it = 0
+	num_nodes = 0
+	for _, node := range holdNodes {
+		realView, _, _ = AddServerNode(node, realView)
+	}
+	log.Info("After Removing ServerNode: ", realView)
+	return realView, deleted
 }
 
 func main() {
