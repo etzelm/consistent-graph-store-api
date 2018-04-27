@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
@@ -100,5 +101,36 @@ func UpdateCausal(c1 map[string]int64, c2 map[string]int64) map[string]int64 {
 func GetPartition(c *gin.Context) {
 	//server_causal[SELF.String()] = server_causal[SELF.String()] + 2
 	c.JSON(200, GetPResponse{statuses[SUCCESS], partition_id})
+	return
+}
+
+func GetAllPartitions(c *gin.Context) {
+	ret := make([]int, 0, 0)
+	x := 0
+	for x < num_partitions {
+		ret = append(ret, x)
+		x = x + 1
+	}
+	server_causal[SELF.String()] = server_causal[SELF.String()] + 2
+	c.JSON(200, GetPsResponse{statuses[SUCCESS], ret})
+	return
+}
+
+func GetPartitionMembers(c *gin.Context) {
+	part_id, has_part_id := c.GetQuery("partition_id")
+	server_causal[SELF.String()] = server_causal[SELF.String()] + 2
+	if has_part_id == false {
+		c.AbortWithStatusJSON(404, map[string]string{
+			"msg":   statuses[ERROR],
+			"error": "Input Not Given",
+		})
+		return
+	}
+	i, _ := strconv.Atoi(part_id)
+	ret := make([]string, 0, 0)
+	for _, no := range VIEW[i] {
+		ret = append(ret, no.String())
+	}
+	c.JSON(200, GetPartResponse{statuses[SUCCESS], ret})
 	return
 }

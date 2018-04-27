@@ -63,6 +63,16 @@ type GetPResponse struct {
 	Part_id int    `json:"partition_id"`
 }
 
+type GetPsResponse struct {
+	Msg          string `json:"msg"`
+	Part_id_list []int  `json:"partition_id_list"`
+}
+
+type GetPartResponse struct {
+	Msg          string   `json:"msg"`
+	Part_members []string `json:"partition_members"`
+}
+
 type ServerNode struct {
 	IP   string
 	Port string
