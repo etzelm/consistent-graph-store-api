@@ -66,7 +66,10 @@ func LoadRoutes(server *gin.Engine) *gin.Engine {
 	// All '/gs' routes are grouped for convenience/clarity.
 	gs := server.Group("/gs")
 	{
+		gs.PUT("/change_view", UpdateView)
 		gs.GET("/partition", GetPartition)
+		gs.GET("/all_partitions", GetAllPartitions)
+		gs.GET("/partition_members", GetPartitionMembers)
 	}
 
 	return server

@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -113,6 +114,41 @@ func (n *ServerNode) String() string {
 // GenerateNode is used to take an ip/port and return a Node instance
 func GenerateServerNode(ip, port string) *ServerNode {
 	return &ServerNode{IP: ip, Port: port}
+}
+
+func UpdateView(c *gin.Context) {
+	operation := c.PostForm("type")
+	n := c.PostForm("ip_port")
+	nodestr := strings.Split(n, ":")
+	node := GenerateServerNode(nodestr[0], nodestr[1])
+	switch operation {
+	case "add":
+		fmt.Println("View change -- Add: ", node)
+		/* if err, part_id := AddNodesView(node); err != nil {
+			server_causal[SELF.String()] = server_causal[SELF.String()] + 2
+			c.JSON(405, map[string]string{
+				"msg": err.Error(),
+			})
+			return
+		} else {
+			server_causal[SELF.String()] = server_causal[SELF.String()] + 2
+			c.JSON(200, AddNodeResponse{statuses[SUCCESS], part_id, num_partitions})
+			return
+		} */
+
+	case "remove":
+		fmt.Println("View change -- Remove: ", node)
+		/* if err := RemoveNodesView(node); err != nil {
+			c.JSON(405, map[string]string{
+				"msg": err.Error(),
+			})
+			return
+		} else {
+			c.JSON(200, RemoveNodeResponse{statuses[SUCCESS], num_partitions})
+			return
+		} */
+	}
+
 }
 
 // AddServerNode is used to add a node to the given view
