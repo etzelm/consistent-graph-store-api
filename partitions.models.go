@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 // IP is this computers IP address
 var IP string
 
@@ -54,4 +56,41 @@ type GetPsResponse struct {
 type GetPartResponse struct {
 	Msg          string   `json:"msg"`
 	Part_members []string `json:"partition_members"`
+}
+
+type AddServerNodeResponse struct {
+	Msg       string `json:"msg"`
+	Part_id   int    `json:"partition_id"`
+	Num_parts int    `json:"number_of_partitions"`
+}
+
+type RemoveServerNodeResponse struct {
+	Msg       string `json:"msg"`
+	Num_parts int    `json:"number_of_partitions"`
+}
+
+// StatusMsg is a type alias to allow for 'enum' style type
+type StatusMsg int
+
+// Port used by gservice
+const (
+	port = ":50051"
+)
+
+// The constants to represent a Status message
+const (
+	SUCCESS StatusMsg = iota
+	ERROR
+)
+
+// Represents the string representation of the 'status' field in some
+// responses
+var statuses = [...]string{
+	"success",
+	"error",
+}
+
+// String stringifies a ServerNode
+func (n *ServerNode) String() string {
+	return fmt.Sprintf("%s:%s", n.IP, n.Port)
 }

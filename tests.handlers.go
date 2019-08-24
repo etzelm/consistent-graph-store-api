@@ -36,6 +36,7 @@ func CheckPut(c *gin.Context) {
 	c.AbortWithStatus(http.StatusMethodNotAllowed)
 }
 
+// LandingPage is the base page for the gs service
 func LandingPage(c *gin.Context) {
 	c.String(http.StatusOK, "Hello!")
 }

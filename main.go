@@ -15,27 +15,6 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-// StatusMsg is a type alias to allow for 'enum' style type
-type StatusMsg int
-
-// Port used by gservice
-const (
-	port = ":50051"
-)
-
-// The constants to represent a Status message
-const (
-	SUCCESS StatusMsg = iota
-	ERROR
-)
-
-// Represents the string representation of the 'status' field in some
-// responses
-var statuses = [...]string{
-	"success",
-	"error",
-}
-
 func main() {
 
 	log.Info("Testing server before start-up...")
@@ -89,6 +68,7 @@ func parseCommandLineArgs() {
 		if numPartitions == 0 {
 			numPartitions = 1
 		}
+		log.Info("Number of Partitions: ", numPartitions)
 		realView := make([][]Node, numPartitions)
 		partitionIter = 0
 		numNodes = 0

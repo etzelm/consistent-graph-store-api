@@ -23,7 +23,7 @@
 
 ## Generate gservice with protoc
 
-- protoc -I gservice/ gservice/gservice.proto --go_out=plugins=grpc:gservic
+- protoc -I gservice/ gservice/gservice.proto --go_out=plugins=grpc:gservice
 
 ## Example Docker Commands
 

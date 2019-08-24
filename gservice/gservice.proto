@@ -4,8 +4,8 @@ import "google/api/annotations.proto";
 // The greeting service definition.
 service Store {
   // Sends a greeting
-  rpc AddNode (ViewChangeRequest) returns (ViewChangeResponse) {}
-  rpc RemoveNode (ViewChangeRequest) returns (ViewChangeResponse) {}
+  rpc AddServerNode (ViewChangeRequest) returns (ViewChangeResponse) {}
+  rpc RemoveServerNode (ViewChangeRequest) returns (ViewChangeResponse) {}
 }
 
 message ViewChangeRequest {
@@ -14,7 +14,7 @@ message ViewChangeRequest {
     ADD_NODE = 0;
     REMOVE_NODE = 1;
   }
-  Node Node = 2;
+  ServerNode ServerNode = 2;
   ViewChangeType Type = 3;
   repeated View CurrentView = 4;
 }
@@ -26,10 +26,10 @@ message ViewChangeResponse {
 }
 
 message View {
-  repeated Node currentPartition = 1;
+  repeated ServerNode currentPartition = 1;
 }
 
-message Node {
-  string Ip = 1;
+message ServerNode {
+  string IP = 1;
   string Port = 2;
 }
