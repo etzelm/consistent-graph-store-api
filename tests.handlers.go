@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -37,4 +38,8 @@ func CheckPut(c *gin.Context) {
 
 func LandingPage(c *gin.Context) {
 	c.String(http.StatusOK, "Hello!")
+}
+
+func testInterface(g Graph) {
+	fmt.Println("interface works")
 }

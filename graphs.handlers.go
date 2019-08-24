@@ -1,7 +1,6 @@
 package main
 
-import "fmt"
-
+// Graph interface for all graph functions
 type Graph interface {
 	// for a little setup maybe
 	// Init()
@@ -9,17 +8,13 @@ type Graph interface {
 	AddEdge(e Edge)
 }
 
-type g struct {
+type graph struct {
 }
 
-func (test *g) AddGraphNode(n GraphNode) {
-
-}
-
-func (test *g) AddEdge(e Edge) {
+func (test *graph) AddGraphNode(n GraphNode) {
 
 }
 
-func testInterface(g Graph) {
-	fmt.Println("interface works")
+func (test *graph) AddEdge(e Edge) {
+
 }

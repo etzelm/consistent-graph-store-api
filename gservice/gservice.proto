@@ -1,0 +1,35 @@
+syntax = "proto3";
+import "google/api/annotations.proto";
+
+// The greeting service definition.
+service Store {
+  // Sends a greeting
+  rpc AddNode (ViewChangeRequest) returns (ViewChangeResponse) {}
+  rpc RemoveNode (ViewChangeRequest) returns (ViewChangeResponse) {}
+}
+
+message ViewChangeRequest {
+  int64 RequestID = 1;
+  enum ViewChangeType {
+    ADD_NODE = 0;
+    REMOVE_NODE = 1;
+  }
+  Node Node = 2;
+  ViewChangeType Type = 3;
+  repeated View CurrentView = 4;
+}
+
+message ViewChangeResponse {
+  int64 RequestID = 1;
+  repeated View currentView = 2;
+  string status = 3;
+}
+
+message View {
+  repeated Node currentPartition = 1;
+}
+
+message Node {
+  string Ip = 1;
+  string Port = 2;
+}

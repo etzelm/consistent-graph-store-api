@@ -32,6 +32,8 @@ var num_nodes int
 // server_causal holds the latest causal_payload we have currently seen on this server
 var server_causal map[string]int64
 
+type server struct{}
+
 type GetPResponse struct {
 	Msg     string `json:"msg"`
 	Part_id int    `json:"partition_id"`
