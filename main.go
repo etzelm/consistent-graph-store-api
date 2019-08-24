@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"os"
+	"strconv"
+	"strings"
 
 	pb "github.com/etzelm/consistent-graph-store-api/gservice"
 
@@ -26,9 +29,6 @@ const (
 	ERROR
 )
 
-// IPPort is this computers IP address
-var IPPort string
-
 // Represents the string representation of the 'status' field in some
 // responses
 var statuses = [...]string{
@@ -45,23 +45,73 @@ func main() {
 
 	log.Info("Server is starting...")
 
+	parseCommandLineArgs()
+
 	log.Info("Launching gRPC Server...")
 	go launchGrpcServer()
 	log.Info("Finished Launching gRPC Server...")
-
-	IPPort := os.Getenv("ip_port")
-	if IPPort == "" {
-		IPPort = "127.0.0.1:8080"
-	}
-	log.Info("IP_PORT: ", IPPort)
-
-	partition_id = 7
 
 	server := gin.Default()
 	log.WithField("server", server).Info("Default Gin server create.")
 	LoadRoutes(server)
 	//generateTicker()
-	server.Run(IPPort)
+	server.Run(IP + ":" + Port)
+}
+
+func parseCommandLineArgs() {
+	IP = os.Getenv("IP")
+	if IP == "" {
+		IP = "127.0.0.1"
+	}
+	log.Info("IP: ", IP)
+
+	Port = os.Getenv("PORT")
+	if Port == "" {
+		Port = "80"
+	}
+	log.Info("PORT: ", Port)
+
+	SELF.IP = IP
+	SELF.Port = Port
+
+	r := os.Getenv("R")
+	R, _ = strconv.Atoi(r)
+	if R == 0 {
+		R = 2
+	}
+	log.Info("R: ", R)
+
+	view := os.Getenv("SERVERS")
+	log.Info("SERVERS: ", view)
+	if view != "" {
+		viewStrings := strings.Split(view, ",")
+		numPartitions = len(viewStrings) / R
+		if numPartitions == 0 {
+			numPartitions = 1
+		}
+		realView := make([][]Node, numPartitions)
+		partitionIter = 0
+		numNodes = 0
+		for _, v := range viewStrings {
+			n := strings.Split(v, ":")
+			partID := 0
+			serverNode := *GenerateServerNode(n[0], n[1])
+			realView, _, partID = AddServerNode(serverNode, realView)
+			if serverNode == SELF {
+				partitionID = partID
+			}
+		}
+		log.Info("Number of Nodes: ", numNodes)
+		causalMap = make(map[string]int64, numNodes)
+		for _, part := range realView {
+			for _, no := range part {
+				causalMap[no.String()] = 0
+			}
+		}
+		fmt.Println("CAUSAL: ", causalMap)
+		fmt.Println("VIEW: ", realView)
+		VIEW = realView
+	}
 }
 
 func launchGrpcServer() {

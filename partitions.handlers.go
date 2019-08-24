@@ -15,27 +15,29 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// GetPartition returns id for which partition this server belongs to
 func GetPartition(c *gin.Context) {
-	//server_causal[SELF.String()] = server_causal[SELF.String()] + 2
-	c.JSON(200, GetPResponse{statuses[SUCCESS], partition_id})
+	causalMap[SELF.String()] = causalMap[SELF.String()] + 2
+	c.JSON(200, GetPResponse{statuses[SUCCESS], partitionID})
 	return
 }
 
+// GetAllPartitions returns list of ids for all valid partitions in the system
 func GetAllPartitions(c *gin.Context) {
 	ret := make([]int, 0, 0)
 	x := 0
-	for x < num_partitions {
+	for x < numPartitions {
 		ret = append(ret, x)
 		x = x + 1
 	}
-	server_causal[SELF.String()] = server_causal[SELF.String()] + 2
+	causalMap[SELF.String()] = causalMap[SELF.String()] + 2
 	c.JSON(200, GetPsResponse{statuses[SUCCESS], ret})
 	return
 }
 
 func GetPartitionMembers(c *gin.Context) {
-	part_id, has_part_id := c.GetQuery("partition_id")
-	server_causal[SELF.String()] = server_causal[SELF.String()] + 2
+	part_id, has_part_id := c.GetQuery("partitionID")
+	causalMap[SELF.String()] = causalMap[SELF.String()] + 2
 	if has_part_id == false {
 		c.AbortWithStatusJSON(404, map[string]string{
 			"msg":   statuses[ERROR],
@@ -125,14 +127,14 @@ func UpdateView(c *gin.Context) {
 	case "add":
 		fmt.Println("View change -- Add: ", node)
 		/* if err, part_id := AddNodesView(node); err != nil {
-			server_causal[SELF.String()] = server_causal[SELF.String()] + 2
+			causalMap[SELF.String()] = causalMap[SELF.String()] + 2
 			c.JSON(405, map[string]string{
 				"msg": err.Error(),
 			})
 			return
 		} else {
-			server_causal[SELF.String()] = server_causal[SELF.String()] + 2
-			c.JSON(200, AddNodeResponse{statuses[SUCCESS], part_id, num_partitions})
+			causalMap[SELF.String()] = causalMap[SELF.String()] + 2
+			c.JSON(200, AddNodeResponse{statuses[SUCCESS], part_id, numPartitions})
 			return
 		} */
 
@@ -144,7 +146,7 @@ func UpdateView(c *gin.Context) {
 			})
 			return
 		} else {
-			c.JSON(200, RemoveNodeResponse{statuses[SUCCESS], num_partitions})
+			c.JSON(200, RemoveNodeResponse{statuses[SUCCESS], numPartitions})
 			return
 		} */
 	}
@@ -164,34 +166,34 @@ func AddServerNode(node ServerNode, view View) (View, bool, int) {
 		}
 	}
 	if !found {
-		if len(view[partition_it]) < R {
-			view[partition_it] = append(view[partition_it], node)
-			part_id = partition_it
-			partition_it = partition_it + 1
-			if partition_it == num_partitions {
-				partition_it = 0
+		if len(view[partitionIter]) < R {
+			view[partitionIter] = append(view[partitionIter], node)
+			part_id = partitionIter
+			partitionIter = partitionIter + 1
+			if partitionIter == numPartitions {
+				partitionIter = 0
 			}
-			num_nodes = num_nodes + 1
+			numNodes = numNodes + 1
 			return view, false, part_id
 		}
 		for ind := range view {
 			if len(view[ind]) < R {
 				view[ind] = append(view[ind], node)
 				part_id = ind
-				partition_it = ind + 1
-				if partition_it == num_partitions {
-					partition_it = 0
+				partitionIter = ind + 1
+				if partitionIter == numPartitions {
+					partitionIter = 0
 				}
-				num_nodes = num_nodes + 1
+				numNodes = numNodes + 1
 				return view, false, part_id
 			}
 		}
 		log.Info("All partitions full, adding new one...")
 		view = append(view, []ServerNode{node})
-		partition_it = num_partitions
-		part_id = partition_it
-		num_partitions = num_partitions + 1
-		num_nodes = num_nodes + 1
+		partitionIter = numPartitions
+		part_id = partitionIter
+		numPartitions = numPartitions + 1
+		numNodes = numNodes + 1
 		return view, true, part_id
 	}
 	return view, false, part_id
@@ -207,7 +209,7 @@ func RemoveServerNode(node ServerNode, view View) (View, bool) {
 			if no != node {
 				newNodes = append(newNodes, no)
 			} else {
-				num_nodes = num_nodes - 1
+				numNodes = numNodes - 1
 			}
 		}
 		newView = append(newView, newNodes)
@@ -219,7 +221,7 @@ func RemoveServerNode(node ServerNode, view View) (View, bool) {
 			newView2 = append(newView2, part)
 		} else {
 			deleted = true
-			num_partitions = num_partitions - 1
+			numPartitions = numPartitions - 1
 		}
 	}
 	holdNodes := make([]ServerNode, 0)
@@ -228,13 +230,13 @@ func RemoveServerNode(node ServerNode, view View) (View, bool) {
 			holdNodes = append(holdNodes, no)
 		}
 	}
-	temp := num_nodes / R
-	if temp != num_partitions {
-		num_partitions = temp
+	temp := numNodes / R
+	if temp != numPartitions {
+		numPartitions = temp
 	}
 	realView := make([][]ServerNode, temp)
-	partition_it = 0
-	num_nodes = 0
+	partitionIter = 0
+	numNodes = 0
 	for _, node := range holdNodes {
 		realView, _, _ = AddServerNode(node, realView)
 	}

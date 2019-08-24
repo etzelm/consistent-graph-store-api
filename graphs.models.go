@@ -4,6 +4,7 @@ package main
 // This is a cool idea ^^^^^ but probably originally we should just make a naive implementation
 // then we can always optimize. We'll see.
 
+// GraphNode interface for the graphs we store
 type GraphNode interface {
 	ID() int
 	String() string
@@ -16,6 +17,7 @@ type GraphNode interface {
 	Value() map[string]interface{}
 }
 
+// Edge inferface for the edges we store
 type Edge interface {
 	Source() GraphNode
 	Target() GraphNode
