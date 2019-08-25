@@ -69,7 +69,7 @@ func parseCommandLineArgs() {
 			numPartitions = 1
 		}
 		log.Info("Number of Partitions: ", numPartitions)
-		realView := make([][]Node, numPartitions)
+		realView := make([][]ServerNode, numPartitions)
 		partitionIter = 0
 		numNodes = 0
 		for _, v := range viewStrings {
