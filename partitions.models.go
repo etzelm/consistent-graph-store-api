@@ -55,6 +55,14 @@ var causalMap map[string]int64
 
 type server struct{}
 
+func (s *server) AddServerNode(c context.Context, vcr *pb.ViewChangeRequest) (*pb.ViewChangeResponse, error) {
+	return nil, nil
+}
+
+func (s *server) RemoveServerNode(c context.Context, vcr *pb.ViewChangeRequest) (*pb.ViewChangeResponse, error) {
+	return nil, nil
+}
+
 // GetPResponse is the structure used to return the user requested partition ID
 type GetPResponse struct {
 	Msg    string `json:"msg"`
@@ -327,10 +335,26 @@ func generateTicker() {
 	}()
 }
 
-func (s *server) AddServerNode(c context.Context, vcr *pb.ViewChangeRequest) (*pb.ViewChangeResponse, error) {
-	return nil, nil
+func timeSeededRandom() *rand.Rand {
+	return rand.New(
+		rand.NewSource(time.Now().UnixNano()))
 }
 
-func (s *server) RemoveServerNode(c context.Context, vcr *pb.ViewChangeRequest) (*pb.ViewChangeResponse, error) {
-	return nil, nil
+// SimpleHash -- This is a copy of how Java generates hashes actually
+func SimpleHash(s string) uint {
+	h := 0
+	for i := 0; i < len(s); i++ {
+		h = 31*h + int(s[i])
+	}
+	return uint(h)
+}
+
+// FindPartition is used to figure out which partition a graph belongs to
+func FindPartition(s string, partitionnumber uint) uint {
+	return SimpleHash(s) % partitionnumber
+}
+
+// RouteToNode takes a graph identifier and returns the partition it belongs to
+func RouteToNode(graph string) uint {
+	return FindPartition(graph, uint(len(VIEW)))
 }
