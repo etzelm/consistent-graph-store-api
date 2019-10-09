@@ -1,10 +1,10 @@
-FROM golang:1.9.2-alpine3.7
+FROM golang:1.13.1-alpine3.10
 
 # Need git for dep
 RUN apk add --no-cache git
 
 # Need dep to get dependencies
-RUN go get github.com/golang/dep/cmd/dep
+RUN go get -u github.com/golang/dep/cmd/dep
 
 # Copy current dir (outside docker) to the proper directory (inside docker)
 COPY . src/github.com/etzelm/consistent-graph-store-api/

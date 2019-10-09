@@ -197,7 +197,7 @@ def get_partition_members(node, partition_id):
     return d['partition_members']    
 
 if __name__ == "__main__":
-    container_name = 'graphStore'
+    container_name = 'graphstore'
     hostname = '192.168.99.100'
     network = 'mynet'
     sudo = ''
@@ -207,7 +207,7 @@ if __name__ == "__main__":
         try: # Test 1
             test_description = "Test 1: Basic functionality for obtaining information about partitions; tests the following GET requests get_all_partitions_ids, get_partition_members and get_partition_id."
             print HEADER + "" + test_description  + ENDC
-            nodes = start_gs(4, container_name, K=2, net=network, sudo=sudo)
+            nodes = start_gs(4, container_name, R=2, net=network, sudo=sudo)
             partition_id_list =  get_all_partitions_ids(nodes[0])
             if len(partition_id_list) != 2:
                 raise Exception("ERROR: the number of partitions should be 2")
@@ -246,12 +246,12 @@ if __name__ == "__main__":
             print HEADER + "" + test_description  + ENDC
             print 
             print OKBLUE + "Starting gs ..." + ENDC
-            nodes = start_gs(4, container_name, K=2, net=network, sudo=sudo)
+            nodes = start_gs(4, container_name, R=2, net=network, sudo=sudo)
 
             print OKBLUE + "Adding 3 nodes" + ENDC
-            n1 = start_new_node(container_name, K=2, net=network, sudo=sudo)
-            n2 = start_new_node(container_name, K=2, net=network, sudo=sudo)
-            n3 = start_new_node(container_name, K=2, net=network, sudo=sudo)
+            n1 = start_new_node(container_name, R=2, net=network, sudo=sudo)
+            n2 = start_new_node(container_name, R=2, net=network, sudo=sudo)
+            n3 = start_new_node(container_name, R=2, net=network, sudo=sudo)
 
             resp_dict = add_node_to_gs(hostname, nodes[0], n1)
             number_of_partitions = resp_dict.get('number_of_partitions')
