@@ -111,7 +111,7 @@ def add_node_to_gs(hostname, cur_node, new_node):
         d = r.json()
         if r.status_code not in [200, 201, '200', '201']:
             raise Exception("Error, status code %s is not 200 or 201" % r.status_code)
-        for field in ['msg', 'partition_id', 'number_of_partitions']:
+        for field in ['msg', 'partitionID', 'number_of_partitions']:
             if not d.has_key(field):
                 raise Exception("Field \"" + field + "\" is not present in response " + str(d))
     except Exception as e:
@@ -142,7 +142,7 @@ def delete_node_from_gs(hostname, cur_node, node_to_delete):
     return d
 
 def get_all_partitions_ids(node):
-    get_str = "http://" + hostname + ":" + str(node.access_port) + "/gs/get_all_partition_ids"
+    get_str = "http://" + hostname + ":" + str(node.access_port) + "/gs/all_partitions"
     try:
         if PRINT_HTTP_REQUESTS:
             print "Get request: " + get_str
@@ -150,17 +150,17 @@ def get_all_partitions_ids(node):
         if PRINT_HTTP_RESPONSES:
             print "Response:", r.text, r.status_code
         d = r.json()
-        for field in ['msg', 'partition_id_list']:
+        for field in ['msg', 'partitionID_list']:
             if not d.has_key(field):
                 raise Exception("Field \"" + field + "\" is not present in response " + str(d))
     except Exception as e:
         print "THE FOLLOWING GET REQUEST RESULTED IN AN ERROR: ",
         print get_str 
         print e
-    return d['partition_id_list'] # returns the current partition ID list of the gs
+    return d['partitionID_list'] # returns the current partition ID list of the gs
 
-def get_partition_id_for_node(node):
-    get_str = "http://" + hostname + ":" + str(node.access_port) + "/gs/get_partition_id"
+def get_partitionID_for_node(node):
+    get_str = "http://" + hostname + ":" + str(node.access_port) + "/gs/partition"
     try:
         if PRINT_HTTP_REQUESTS:
             print "Get request: " + get_str
@@ -168,17 +168,17 @@ def get_partition_id_for_node(node):
         if PRINT_HTTP_RESPONSES:
             print "Response:", r.text, r.status_code
         d = r.json()
-        for field in ['msg', 'partition_id']:
+        for field in ['msg', 'partitionID']:
             if not d.has_key(field):
                 raise Exception("Field \"" + field + "\" is not present in response " + str(d))
     except Exception as e:
         print "THE FOLLOWING GET REQUEST RESULTED IN AN ERROR: ",
         print get_str
         print e
-    return d['partition_id']    
+    return d['partitionID']    
 
-def get_partition_members(node, partition_id):
-    get_str = "http://" + hostname + ":" + str(node.access_port) + "/gs/get_partition_members?partition_id=" + str(partition_id)
+def get_partition_members(node, partitionID):
+    get_str = "http://" + hostname + ":" + str(node.access_port) + "/gs/partition_members?partitionID=" + str(partitionID)
     d = None
     try:
         if PRINT_HTTP_REQUESTS:
@@ -198,18 +198,18 @@ def get_partition_members(node, partition_id):
 
 if __name__ == "__main__":
     container_name = 'graphstore'
-    hostname = '192.168.99.100'
+    hostname = '172.17.0.1'
     network = 'mynet'
     sudo = ''
     tests_to_run = [1,2] #  
 
     if 1 in tests_to_run:
         try: # Test 1
-            test_description = "Test 1: Basic functionality for obtaining information about partitions; tests the following GET requests get_all_partitions_ids, get_partition_members and get_partition_id."
+            test_description = "Test 1: Basic functionality for obtaining information about partitions; tests the following GET requests get_all_partitions_ids, get_partition_members and get_partitionID."
             print HEADER + "" + test_description  + ENDC
             nodes = start_gs(4, container_name, R=2, net=network, sudo=sudo)
-            partition_id_list =  get_all_partitions_ids(nodes[0])
-            if len(partition_id_list) != 2:
+            partitionID_list =  get_all_partitions_ids(nodes[0])
+            if len(partitionID_list) != 2:
                 raise Exception("ERROR: the number of partitions should be 2")
             
             print OKBLUE + "Obtaining partition members for partition " + str(0)  + ENDC
@@ -225,7 +225,7 @@ if __name__ == "__main__":
                 part_nodes.append(n)
             print OKBLUE + "Asking nodes directly about their partition id. Information should be consistent" + ENDC
             for i in range(len(part_nodes)):
-                part_id = get_partition_id_for_node(part_nodes[i])
+                part_id = get_partitionID_for_node(part_nodes[i])
                 if part_id != 0:
                     raise Exception("ERRR: inconsistent information about partition ids!")
             print OKBLUE + "Ok, killing all the nodes in the partition " + str(0) + ENDC

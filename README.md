@@ -29,7 +29,7 @@
 
 Starting a system with 4 active server hosts and a maximum partition size of 2:
 
-- docker run -p 3001:3000 --ip=10.0.0.21:3000 --net=mynet -e IP="10.0.0.21" -e PORT="3001" -e R=2 -e SERVERS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
-- docker run -p 3002:3000 --ip=10.0.0.22:3000 --net=mynet -e IP="10.0.0.22" -e PORT="3002" -e R=2 -e SERVERS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
-- docker run -p 3003:3000 --ip=10.0.0.23:3000 --net=mynet -e IP="10.0.0.23" -e PORT="3003" -e R=2 -e SERVERS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
-- docker run -p 3004:3000 --ip=10.0.0.24:3000 --net=mynet -e IP="10.0.0.24" -e PORT="3004" -e R=2 -e SERVERS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
+- docker run -p 3001:3000 --ip=10.0.0.21 --net=mynet -e IP="10.0.0.21" -e PORT="3001" -e R=2 -e SERVERS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
+- docker run -p 3002:3000 --ip=10.0.0.22 --net=mynet -e IP="10.0.0.22" -e PORT="3002" -e R=2 -e SERVERS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
+- docker run -p 3003:3000 --ip=10.0.0.23 --net=mynet -e IP="10.0.0.23" -e PORT="3003" -e R=2 -e SERVERS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer
+- docker run -p 3004:3000 --ip=10.0.0.24 --net=mynet -e IP="10.0.0.24" -e PORT="3004" -e R=2 -e SERVERS="10.0.0.21:3000,10.0.0.22:3000,10.0.0.23:3000,10.0.0.24:3000" mycontainer

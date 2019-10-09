@@ -17,9 +17,6 @@ RUN dep ensure
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o graphstore .
 
-# # Install assignment/code
-# RUN go install .
-
 FROM alpine:latest  
 RUN apk --no-cache add ca-certificates
 WORKDIR /
